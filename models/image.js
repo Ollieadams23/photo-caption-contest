@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       // An image can have many captions
       Image.hasMany(models.Caption, { foreignKey: 'imageId', as: 'captions' });
     }
-      // define association here
-      Image.hasMany(models.Caption, { foreignKey: 'imageId', as: 'captions' });
+  }
+  Image.init({
     url: DataTypes.STRING,
     description: DataTypes.STRING
   }, {
