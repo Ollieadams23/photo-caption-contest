@@ -1,0 +1,20 @@
+
+
+header{
+    background-color: red;
+    height: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+navbar{
+    background-color: rgb(231, 74, 2);
+    height: 50px;
+    width:25%;
+    display: flex;
+    justify-content: space-around;
+}
+
+
