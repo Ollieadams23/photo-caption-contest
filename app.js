@@ -2,12 +2,26 @@
 const express = require('express');// Import the 'express' module, which is a web application framework for Node.js. This allows us to create a server and handle HTTP requests and responses.
 const app = express();// Import the 'express' module and create an instance of it called 'app'.
 const db = require('./models'); // Import the database models from the 'models' directory. This allows us to interact with the database using Sequelize.
+app.use(express.json());
+
 
 // Set up middleware to parse incoming request bodies as JSON and URL-encoded data.
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from the 'public' directory. This allows us to serve HTML, CSS, and JavaScript files to the client.
 app.use(express.static(__dirname + '/public'));
+
+const bcrypt = require('bcrypt');
+//hash a hard coded pass
+bcrypt.hash('jesus4866', 10, (err, hash) => {
+  if (err) {
+    console.error('Error hashing password:', err);
+    } else {
+        console.log('Hashed password:', hash);
+    }
+});
+
+
 
 
 // Optional: Test the connection
@@ -17,7 +31,13 @@ db.sequelize.authenticate()
   .catch(err => console.error('Database connection error:', err));
   
 
+//include images route
+const imagesRouter = require('./routes/images');
+app.use('/images', imagesRouter);
 
+//captions route
+const captionsRouter = require('./routes/captions');
+app.use('/captions', captionsRouter);
 
 // Set up the server to handle GET requests to the root URL ('/').
 app.get('/', (req, res) => {
@@ -42,7 +62,6 @@ app.post('/auth', (req, res) => {
         res.send('Invalid username or password');
     }
 });
-
 
 
 

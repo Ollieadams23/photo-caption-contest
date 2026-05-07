@@ -32,18 +32,33 @@ module.exports = {
         description: 'Scared cat',
         createdAt: new Date(),
         updatedAt: new Date()
+      },
+      {
+        url: '/public/images/depp.png',
+        description: 'J Depp',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        url: '/public/images/seals.png',
+        description: 'Funny seals',
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ], {});
   },
 
 
 
-  async down (queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
-  }
+async down (queryInterface, Sequelize) {
+  await queryInterface.bulkDelete('Images', {
+    url: [
+      '/public/images/dog.png',
+      '/public/images/koala.png',
+      '/public/images/scared_cat.png',
+      '/public/images/depp.png',
+      '/public/images/seals.png'
+    ]
+  }, {});
+}
 };

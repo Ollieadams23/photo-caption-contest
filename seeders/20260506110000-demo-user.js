@@ -6,7 +6,7 @@ module.exports = {
       {
         username: 'demo_user',
         email: 'email@example.com',
-        passwordHash: '$2b$10$abcdefghijklmnopqrstuv', // Example hash, replace with a real hash for production
+        passwordHash: '$2b$10$5ekJFLrKiPEqcmKyNfLgEesICjlazmQnKK62RTUG2YH4IWSjHqoDy', // Example hash, replace with a real hash for production
         createdAt: new Date(),
         updatedAt: new Date()
       }
