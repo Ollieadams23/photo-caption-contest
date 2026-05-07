@@ -2,8 +2,9 @@
 const express = require('express');// Import the 'express' module, which is a web application framework for Node.js. This allows us to create a server and handle HTTP requests and responses.
 const app = express();// Import the 'express' module and create an instance of it called 'app'.
 const db = require('./models'); // Import the database models from the 'models' directory. This allows us to interact with the database using Sequelize.
-app.use(express.json());
 
+
+app.use(express.json());// Set up middleware to parse incoming request bodies as JSON. This allows us to access the data sent in the body of HTTP requests as JavaScript objects.
 
 // Set up middleware to parse incoming request bodies as JSON and URL-encoded data.
 app.use(express.urlencoded({ extended: true }));
@@ -11,17 +12,34 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files from the 'public' directory. This allows us to serve HTML, CSS, and JavaScript files to the client.
 app.use(express.static(__dirname + '/public'));
 
+
 const bcrypt = require('bcrypt');
+
 //hash a hard coded pass
-bcrypt.hash('jesus4866', 10, (err, hash) => {
-  if (err) {
-    console.error('Error hashing password:', err);
-    } else {
-        console.log('Hashed password:', hash);
-    }
+// bcrypt.hash('test', 10, (err, hash) => {
+//   if (err) {
+//     console.error('Error hashing password:', err);
+//     } else {
+//         console.log('Hashed password:', hash);
+//     }
+// });
+
+
+const session = require('express-session');
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false } // Set to true if using HTTPS
+}));
+// Auth routes
+const authRouter = require('./routes/auth');
+app.use('/auth', authRouter);
+
+
+app.get('/login', (req, res) => {
+  res.sendFile(__dirname + '/public/login.html');
 });
-
-
 
 
 // Optional: Test the connection
@@ -44,24 +62,9 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
-// Set up the server to handle GET requests to the '/login' URL.
-app.get('/login', (req, res) => {
-  res.sendFile(__dirname + '/public/login.html');
-});
-
-// Set up the server to handle GET requests to the '/logout' URL.
-app.get('/logout', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
-});
 
 
-app.post('/auth', (req, res) => {
-    if (req.body.username === 'admin' && req.body.password === 'password') {
-        res.send('Login successful!');
-    } else {
-        res.send('Invalid username or password');
-    }
-});
+
 
 
 

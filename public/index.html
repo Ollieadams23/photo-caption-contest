@@ -13,8 +13,10 @@
     <navbar>
         <a href="/">Home</a>
         <a href="/login">Login</a>
-        <a href="/logout">Logout</a>
-        <a href="/profile">Profile</a>
+        <form action="/auth/logout" method="POST" style="display:inline;">
+            <button type="submit" style="background:none;border:none;color:blue;cursor:pointer;">Logout</button>
+        </form>
+        <a href="/auth/profile">Profile</a>
     </navbar>
 </body>
 </html>

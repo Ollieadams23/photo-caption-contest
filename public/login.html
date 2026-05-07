@@ -10,13 +10,15 @@
         <navbar>
         <a href="/">Home</a>
         <a href="/login">Login</a>
-        <a href="/logout">Logout</a>
-        <a href="/profile">Profile</a>
+        <form action="/auth/logout" method="POST" style="display:inline;">
+            <button type="submit" style="background:none;border:none;color:blue;cursor:pointer;">Logout</button>
+        </form>
+        <a href="/auth/profile">Profile</a>
     </navbar>
     <h2>Login</h2>
-    <form action="/auth" method="POST">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username"><br>
+    <form action="/auth/login" method="POST">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email"><br>
         <label for="password">Password:</label>
         <input type="password" id="password" name="password"><br>
         <input type="submit" value="Login">
