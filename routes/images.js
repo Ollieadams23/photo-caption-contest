@@ -16,6 +16,7 @@ router.get('/', async (req, res) => {
         // Try to get cached images from redis
         const cachedImages = await redisClient.get('images');
         if (cachedImages) {
+            console.log(JSON.parse(cachedImages));
             console.log('Found cached images in Redis');
             return res.status(200).json(JSON.parse(cachedImages));
         }

@@ -10,15 +10,15 @@
     <header>
         <h1>Photo Caption Contest</h1>
     </header>
-
-    <navbar style="margin-bottom: 2em;">
-        <a href="/">Home</a>
-        <a href="/login">Login/Register</a>
-        <form action="/auth/logout" method="POST" style="display:inline;">
-            <button type="submit" style="background:none;border:none;color:blue;cursor:pointer;">Logout</button>
-        </form>
-        <a href="/auth/profile">Profile</a>
-    </navbar>
+    <!-- Include navbar.html -->
+    <div id="navbar-container"></div>
+    <script>
+        fetch('/navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+            });
+    </script>
 
     <div style="display: flex; justify-content: center; gap: 3em; flex-wrap: wrap;">
         <div style="border: 1px solid #ccc; border-radius: 8px; padding: 2em; min-width: 300px; background: #fafbfc; box-shadow: 0 2px 8px #eee;">
@@ -27,7 +27,7 @@
                 <label for="login-email">Email:</label>
                 <input type="email" id="login-email" name="email" required>
                 <label for="login-password">Password:</label>
-                <input type="password" id="login-password" name="password" minlength="6" required>
+                <input type="password" id="login-password" name="password" minlength="4" required>
                 <input type="submit" value="Login" style="margin-top: 1em;">
             </form>
         </div>

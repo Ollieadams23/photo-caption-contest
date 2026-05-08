@@ -49,7 +49,7 @@ router.post('/login', async (req, res) => {
     }
     req.session.userId = user.id;
     req.session.loggedIn = true;
-res.sendFile(require('path').join(__dirname, '../private/authorized.html')); 
+res.sendFile(require('path').join(__dirname, '../private/profile.html')); 
  } catch (err) {
     res.status(500).json({ error: 'Login failed.' });
   }

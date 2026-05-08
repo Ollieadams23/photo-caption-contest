@@ -49,6 +49,9 @@ app.use(session({
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
 
+const profileRouter = require('./routes/profile');
+app.use('/profile', profileRouter);
+
 
 app.get('/login', (req, res) => {
   res.sendFile(__dirname + '/public/login.html');

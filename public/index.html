@@ -10,13 +10,13 @@
     <h1>Photo Caption Contest</h1>
 </header>
 <body>
-    <navbar>
-        <a href="/">Home</a>
-        <a href="/login">Login/Register</a>
-        <form action="/auth/logout" method="POST" style="display:inline;">
-            <button type="submit" style="background:none;border:none;color:blue;cursor:pointer;">Logout</button>
-        </form>
-        <a href="/auth/profile">Profile</a>
-    </navbar>
+    <div id="navbar-container"></div>
+    <script>
+        fetch('/navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+            });
+    </script>
 </body>
 </html>

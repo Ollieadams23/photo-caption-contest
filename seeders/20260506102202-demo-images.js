@@ -16,31 +16,31 @@ module.exports = {
     // Insert demo images
     await queryInterface.bulkInsert('Images', [
       {
-        url: '/public/images/dog.png',
+        url: '/images/dog.png',
         description: 'Funny dog',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        url: '/public/images/koala.png',
+        url: '/images/koala.png',
         description: 'Funny koala',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        url: '/public/images/scared_cat.png',
+        url: '/images/scared_cat.png',
         description: 'Scared cat',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        url: '/public/images/depp.png',
+        url: '/images/depp.png',
         description: 'J Depp',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        url: '/public/images/seals.png',
+        url: '/images/seals.png',
         description: 'Funny seals',
         createdAt: new Date(),
         updatedAt: new Date()
@@ -53,11 +53,11 @@ module.exports = {
 async down (queryInterface, Sequelize) {
   await queryInterface.bulkDelete('Images', {
     url: [
-      '/public/images/dog.png',
-      '/public/images/koala.png',
-      '/public/images/scared_cat.png',
-      '/public/images/depp.png',
-      '/public/images/seals.png'
+      '/images/dog.png',
+      '/images/koala.png',
+      '/images/scared_cat.png',
+      '/images/depp.png',
+      '/images/seals.png'
     ]
   }, {});
 }

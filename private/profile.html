@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+        <div id="navbar-container"></div>
+    <div class="container" style="max-width: 500px; margin: 2em auto; padding: 2em; border: 1px solid #ccc; border-radius: 8px; background: #fafbfc; box-shadow: 0 2px 8px #eee;">
+        <h2 style="text-align:center;">User Profile</h2>
+        <div id="profile-info">
+            <!-- Profile info will be loaded here -->
+        </div>
+
+    </div>
+    <div id="user-images" style="margin-top:2em;">
+    <h3>Your Images</h3>
+    <!-- Images will be loaded here -->
+
+</div>
+
+
+    <script>
+    // Fetch and display user profile info
+    fetch('/auth/profile/data', { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => {
+        if(data.error) {
+          document.getElementById('profile-info').innerHTML = `<p style='color:red;'>${data.error}</p>`;
+        } else {
+          document.getElementById('profile-info').innerHTML = `
+            <p><strong>Username:</strong> ${data.username}</p>
+            <p><strong>Email:</strong> ${data.email}</p>
+          `;
+        }
+      })
+      .catch(() => {
+        document.getElementById('profile-info').innerHTML = '<p style="color:red;">Failed to load profile.</p>';
+      });
+    </script>
+    <script>
+        fetch('/navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+            });
+    </script>
+    <script>
+// Fetch and display all images
+fetch('/images')
+  .then(res => res.json())
+  .then(images => {
+    const imagesDiv = document.getElementById('user-images');
+    if (!Array.isArray(images) || images.length === 0) {
+      imagesDiv.innerHTML += '<p>No images found.</p>';
+      return;
+    }
+    images.forEach(img => {
+      imagesDiv.innerHTML += `
+        <div class="profile-image" style="margin-bottom:1.5em;">
+          <img src="${img.url}" alt="Image ${img.id}" style="max-width:100%;height:auto;display:block;">
+          <div class="captions" id="captions-for-${img.id}"></div>
+        </div>
+      `;
+    });
+  })
+  .catch(() => {
+    document.getElementById('user-images').innerHTML += '<p style="color:red;">Failed to load images.</p>';
+  });
+</script>
+
+</body>
+</html>
