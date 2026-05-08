@@ -26,7 +26,7 @@ router.post('/register',
     const passwordHash = await bcrypt.hash(password, 10);
     const user = await User.create({ username, email, passwordHash });
     req.session.userId = user.id;
-    res.status(201).json({ message: 'User registered successfully.' }).send("/auth/login");
+    res.status(201).sendFile(require('path').join(__dirname, '../public/login.html'));
   } catch (err) {
     res.status(500).json({ error: 'Registration failed.' });
   }

@@ -12,7 +12,20 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files from the 'public' directory. This allows us to serve HTML, CSS, and JavaScript files to the client.
 app.use(express.static(__dirname + '/public'));
 
+//redis
+const redis = require('redis');
+const client = redis.createClient();
 
+client.on('error', (err) => {
+  console.error('Redis error:', err);
+});
+
+client.connect()
+  .then(() => console.log('Connected to Redis!'))
+  .catch((err) => console.error('Redis connection error:', err));
+
+
+  // Import bcrypt for password hashing
 const bcrypt = require('bcrypt');
 
 //hash a hard coded pass
