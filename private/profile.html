@@ -62,7 +62,15 @@ fetch('/images')
         <div class="profile-image" style="margin-bottom:1.5em;">
           <img src="${img.url}" alt="Image ${img.id}" style="max-width:100%;height:auto;display:block;">
           <div class="captions" id="captions-for-${img.id}"></div>
-        </div>
+        
+        <div class="add-caption" style="margin-bottom:2em;">
+          <h3>Add Caption</h3>
+          <form action="/captions/${img.id}" method="POST" style="display: flex; flex-direction: column; gap: 1em;">
+            <label for="caption-text">Caption:</label>
+            <input type="text" id="caption-text" name="text" required>
+            <input type="submit" value="Add Caption" style="margin-top: 1em;">
+          </form>
+        </div></div>
       `;
     });
   })
@@ -70,6 +78,36 @@ fetch('/images')
     document.getElementById('user-images').innerHTML += '<p style="color:red;">Failed to load images.</p>';
   });
 </script>
+
+  <script>
+  // After images are loaded, fetch and display captions for each image
+  fetch('/images')
+    .then(res => res.json())
+    .then(images => {
+      if (!Array.isArray(images) || images.length === 0) return;
+      images.forEach(img => {
+        fetch(`/captions/${img.id}`)
+          .then(res => res.json())
+          .then(captions => {
+            const captionsDiv = document.getElementById(`captions-for-${img.id}`);
+            if (!captionsDiv) return;
+            if (captions.error || !Array.isArray(captions) || captions.length === 0) {
+              captionsDiv.innerHTML = '<p style="color: #888;">No captions yet.</p>';
+              return;
+            }
+            captionsDiv.innerHTML = captions.map(caption => {
+              // Use username from caption.user.username if available, else fallback to userId
+              const username = caption.user && caption.user.username ? caption.user.username : `User #${caption.userId}`;
+              return `<div class="caption-item"><strong>${username}:</strong> ${caption.text}</div>`;
+            }).join('');
+          })
+          .catch(() => {
+            const captionsDiv = document.getElementById(`captions-for-${img.id}`);
+            if (captionsDiv) captionsDiv.innerHTML = '<p style="color:red;">Failed to load captions.</p>';
+          });
+      });
+    });
+  </script>
 
 </body>
 </html>

@@ -49,8 +49,13 @@ router.post('/login', async (req, res) => {
     }
     req.session.userId = user.id;
     req.session.loggedIn = true;
-res.sendFile(require('path').join(__dirname, '../private/profile.html')); 
- } catch (err) {
+    req.session.isAdmin = !!user.isAdmin;
+    if (user.isAdmin) {
+      res.sendFile(require('path').join(__dirname, '../private/admin.html'));
+    } else {
+      res.sendFile(require('path').join(__dirname, '../private/profile.html'));
+    }
+  } catch (err) {
     res.status(500).json({ error: 'Login failed.' });
   }
 });

@@ -18,4 +18,24 @@ navbar{
     align-items: center;
 }
 
+img {
+    width: 300px;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
 
+
+.profile-image {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1em;
+}
+
+.captions {
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}

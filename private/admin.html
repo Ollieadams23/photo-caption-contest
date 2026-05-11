@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Manage Images</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container" style="max-width: 600px; margin: 2em auto; padding: 2em; border: 1px solid #ccc; border-radius: 8px; background: #fafbfc; box-shadow: 0 2px 8px #eee;">
+    <h2>Admin: Manage Images</h2>
+    <h3>Add New Image</h3>
+    <form id="add-image-form" style="margin-bottom:2em;" enctype="multipart/form-data">
+      <label for="image-url">Image URL:</label>
+      <input type="url" id="image-url" name="url" style="width:100%;margin-bottom:1em;">
+      <div style="margin: 1em 0; text-align:center;">or</div>
+      <label for="image-file">Upload Image File:</label>
+      <input type="file" id="image-file" name="file" accept="image/*" style="width:100%;margin-bottom:1em;">
+      <button type="submit">Add Image</button>
+    </form>
+    <h3>All Images</h3>
+    <div id="images-list"></div>
+  </div>
+  <script>
+    // Fetch and display all images
+    function loadImages() {
+      fetch('/images')
+        .then(res => res.json())
+        .then(images => {
+          const list = document.getElementById('images-list');
+          if (!Array.isArray(images) || images.length === 0) {
+            list.innerHTML = '<p>No images found.</p>';
+            return;
+          }
+          list.innerHTML = images.map(img => `
+            <div class="admin-image-item" style="display:flex;align-items:center;gap:1em;margin-bottom:1em;">
+              <img src="${img.url}" alt="Image ${img.id}" style="width:100px;height:70px;object-fit:cover;border:1px solid #ccc;">
+              <span>ID: ${img.id}</span>
+              <button onclick="deleteImage(${img.id})">Delete</button>
+            </div>
+          `).join('');
+        });
+    }
+
+    // Add image (URL or file)
+    document.getElementById('add-image-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const url = document.getElementById('image-url').value;
+      const fileInput = document.getElementById('image-file');
+      const file = fileInput.files[0];
+      if (!url && !file) {
+        alert('Please provide an image URL or select a file to upload.');
+        return;
+      }
+      const formData = new FormData();
+      if (url) formData.append('url', url);
+      if (file) formData.append('file', file);
+      fetch('/images', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to add image');
+        return res.json();
+      })
+      .then(() => {
+        document.getElementById('image-url').value = '';
+        fileInput.value = '';
+        loadImages();
+      })
+      .catch(() => alert('Failed to add image.'));
+    });
+
+    // Delete image
+    window.deleteImage = function(id) {
+      if (!confirm('Delete this image?')) return;
+      fetch(`/images/${id}`, { method: 'DELETE' })
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to delete image');
+          loadImages();
+        })
+        .catch(() => alert('Failed to delete image.'));
+    }
+
+    // Initial load
+    loadImages();
+  </script>
+</body>
+</html>

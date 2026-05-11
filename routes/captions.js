@@ -4,19 +4,31 @@ const db = require('../models');// Import the database models from the 'models' 
 
 
 
+
 router.get('/:id', async (req, res) => {
-    const captions = await db.Caption.findAll({
-        where: { imageId: req.params.id }
-    });
-    if (!captions || captions.length === 0) {
-        console.log('No captions found for image ID:', req.params.id);
-        return res.status(404).json({ error: 'No captions found for that image ID' });
+    try {
+        const captions = await db.Caption.findAll({
+            where: { imageId: req.params.id },
+            include: [{
+                model: db.User,
+                as: 'user',
+                attributes: ['username']
+            }]
+        });
+        if (!captions || captions.length === 0) {
+            console.log('No captions found for image ID:', req.params.id);
+            return res.status(404).json({ error: 'No captions found for that image ID' });
+        }
+        res.status(200).json(captions);
+    } catch (err) {
+        console.error('Error fetching captions:', err);
+        res.status(500).json({ error: 'Internal server error' });
     }
-    res.status(200).json(captions);
 });
 
 router.post('/:id', async (req, res) => {
-    const { text, userId } = req.body;
+    const {userId} = req.session;
+    const { text} = req.body;
     if (!text) {
         console.log('No text provided for caption.');
         return res.status(400).json({ error: 'No text provided for caption' });
