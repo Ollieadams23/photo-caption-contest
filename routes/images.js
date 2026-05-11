@@ -18,20 +18,17 @@ redisClient.connect()
 
 router.get('/', async (req, res) => {
     try {
-        // Try to get cached images from redis
-        const cachedImages = await redisClient.get('images');
-        if (cachedImages) {
-            console.log(JSON.parse(cachedImages));
-            console.log('Found cached images in Redis');
-            return res.status(200).json(JSON.parse(cachedImages));
-        }
+        // Redis caching temporarily disabled
+        // const cachedImages = await redisClient.get('images');
+        // if (cachedImages) {
+        //     console.log(JSON.parse(cachedImages));
+        //     console.log('Found cached images in Redis');
+        //     return res.status(200).json(JSON.parse(cachedImages));
+        // }
 
-        // If not cached, fetch from database
+        // Always fetch from database
         const images = await db.Image.findAll();
-        // Map to array of objects with id and image data
         const imagesWithIds = images.map(img => ({ id: img.id, ...img.toJSON() }));
-        // Cache the result for 300 seconds (5 minutes)
-        await redisClient.set('images', JSON.stringify(imagesWithIds), { EX: 300 });
         res.json(imagesWithIds);
     } catch (err) {
         console.log(err);
@@ -56,8 +53,8 @@ router.get('/:id', async (req, res) => {
             console.log('No image found with ID:', imageId);
             return res.status(404).json({ error: 'No image found with that ID' });
         }
-        // Cache the result for 300 seconds (5 minutes)
-        await redisClient.set(`image:${imageId}`, JSON.stringify(image), { EX: 300 });
+        // Cache the result for 5 seconds
+        await redisClient.set(`image:${imageId}`, JSON.stringify(image), { EX: 5 });
         res.json(image);
     } catch (err) {
         console.log(err);
@@ -107,7 +104,11 @@ router.post('/', upload.single('file'), async (req, res) => {
 router.delete('/:id', async (req, res) => {
     const imageId = req.params.id;
     try {
+        if(isNaN(Number(imageId))){
+            return res.status(400).json({ error: 'Invalid image ID' });
+        }
         const image = await db.Image.findByPk(imageId);
+        console.log('Found image for deletion:', image);
         if (!image) {
             console.log('No image found with ID:', imageId);
             return res.status(404).json({ error: 'No image found with that ID' });
@@ -125,10 +126,17 @@ router.delete('/:id', async (req, res) => {
                 console.log('Failed to delete image file:', filePath, err);
             }
         }
+            //del from cache
+            try{
+                await redisClient.del(`image:${imageId}`);
+                }catch(err){
+                console.log(err);
+                }
 
-        await image.destroy();
+
+        await image.destroy();// Delete the image record from the database
         if (fileDeleteError) {
-            return res.status(200).json({ message: 'Image deleted from database, but file was missing or could not be deleted.' });
+            return res.status(200).json({ message: 'Image deleted from database, but file was missing' });
         } else {
             return res.status(204).json({ message: 'Image deleted successfully' });
         }
@@ -136,6 +144,7 @@ router.delete('/:id', async (req, res) => {
         console.log(err);
         return res.status(500).json({ error: 'Failed to delete image' });
     }
+
 });
 
 
