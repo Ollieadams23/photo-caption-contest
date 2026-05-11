@@ -50,7 +50,7 @@ router.post('/:id', async (req, res) => {
         imageId: req.params.id
     });
     console.log('Created caption:', caption);
-    res.status(201).json(caption);
+    res.status(201).sendFile(require('path').join(__dirname, '../private/profile.html'));
 });
 
 module.exports = router;

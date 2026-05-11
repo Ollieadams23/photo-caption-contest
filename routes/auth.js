@@ -51,9 +51,9 @@ router.post('/login', async (req, res) => {
     req.session.loggedIn = true;
     req.session.isAdmin = !!user.isAdmin;
     if (user.isAdmin) {
-      res.sendFile(require('path').join(__dirname, '../private/admin.html'));
+      res.status(200).sendFile(require('path').join(__dirname, '../private/admin.html'));
     } else {
-      res.sendFile(require('path').join(__dirname, '../private/profile.html'));
+      res.status(200).sendFile(require('path').join(__dirname, '../private/profile.html'));
     }
   } catch (err) {
     res.status(500).json({ error: 'Login failed.' });
@@ -63,7 +63,8 @@ router.post('/login', async (req, res) => {
 // Logout endpoint
 router.post('/logout', (req, res) => {
   req.session.loggedIn = false;
-  res.json({ message: 'Logged out successfully.' });
+  req.session.isAdmin = false;
+  res.status(200).json({ message: 'Logged out successfully.' });
 });
 
 module.exports = router;

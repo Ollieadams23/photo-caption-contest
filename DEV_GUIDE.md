@@ -47,11 +47,16 @@ This backend is built with Node.js, Express, Sequelize (PostgreSQL), and support
 - **sequelize**: ORM for PostgreSQL
 - **bcrypt**: Password hashing
 - **express-session**: Session management
+- **redis**: Caching image lists and metadata for performance
+- **multer**: File upload handling for images
+- **bad-words** or **leo-profanity**: Profanity filter for captions/comments
 
 ## Adding or Modifying Features
 - Add new endpoints in `routes/` and (optionally) `controllers/`.
 - Update or add Sequelize models in `models/` and run migrations if schema changes.
 - Use `bcrypt` for password handling.
+- Use a profanity filter (see `routes/captions.js`) to block inappropriate captions/comments.
+- Redis cache is automatically invalidated when images are added or deleted.
 - Update `DEV_PROGRESS.md` after major changes.
 
 ## Authentication Details

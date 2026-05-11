@@ -18,17 +18,20 @@ redisClient.connect()
 
 router.get('/', async (req, res) => {
     try {
-        // Redis caching temporarily disabled
-        // const cachedImages = await redisClient.get('images');
-        // if (cachedImages) {
-        //     console.log(JSON.parse(cachedImages));
-        //     console.log('Found cached images in Redis');
-        //     return res.status(200).json(JSON.parse(cachedImages));
-        // }
+        // Redis caching enabled
+        const cachedImages = await redisClient.get('images');
+        if (cachedImages) {
+            console.log(JSON.parse(cachedImages));
+            console.log('Found cached images in Redis');
+            return res.status(200).json(JSON.parse(cachedImages));
+        }
 
-        // Always fetch from database
+        // If not cached, fetch from database
         const images = await db.Image.findAll();
+        // Map to array of objects with id and image data
         const imagesWithIds = images.map(img => ({ id: img.id, ...img.toJSON() }));
+        // Cache the result for 5 minutes
+        await redisClient.set('images', JSON.stringify(imagesWithIds), { EX: 300 });
         res.json(imagesWithIds);
     } catch (err) {
         console.log(err);
@@ -53,8 +56,8 @@ router.get('/:id', async (req, res) => {
             console.log('No image found with ID:', imageId);
             return res.status(404).json({ error: 'No image found with that ID' });
         }
-        // Cache the result for 5 seconds
-        await redisClient.set(`image:${imageId}`, JSON.stringify(image), { EX: 5 });
+        // Cache the result for 5 minutes
+        await redisClient.set(`image:${imageId}`, JSON.stringify(image), { EX: 300 });
         res.json(image);
     } catch (err) {
         console.log(err);
@@ -90,6 +93,8 @@ router.post('/', upload.single('file'), async (req, res) => {
     }
     try {
         const image = await db.Image.create({ url });
+        // Invalidate images cache
+        await redisClient.del('images');
         res.status(201).json(image);
     } catch (err) {
         console.log(err);
@@ -128,7 +133,8 @@ router.delete('/:id', async (req, res) => {
         }
             //del from cache
             try{
-                await redisClient.del(`image:${imageId}`);
+                // Invalidate images cache
+                await redisClient.del('images');
                 }catch(err){
                 console.log(err);
                 }
