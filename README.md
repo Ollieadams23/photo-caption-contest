@@ -42,6 +42,14 @@ A web application for uploading images and submitting creative captions. Built w
 - `public/` - Static files (HTML, CSS, images)
 - `private/` - Authenticated HTML pages
 
+## API Documentation (Swagger)
+
+Interactive API docs are available via Swagger UI:
+
+- All main endpoints are documented using Swagger JSDoc comments in the route files.
+- After starting the server, visit [http://localhost:3000/api-docs](http://localhost:3000/api-docs) in your browser to view and interact with the API documentation.
+- The docs are always up-to-date with your code and support live testing of endpoints.
+
 ## Development
 - See `DEV_GUIDE.md` for backend details
 - See `DEV_PROGRESS.md` for development log
