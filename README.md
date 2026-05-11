@@ -16,13 +16,19 @@ A web application for uploading images and submitting creative captions. Built w
    ```sh
    npm install
    ```
-3. Configure your database in `config/config.json` and set up PostgreSQL
+3. Configure your database in `.env` and set up PostgreSQL
 4. Run migrations and seeders:
    ```sh
    npx sequelize-cli db:migrate
    npx sequelize-cli db:seed:all
    ```
-   > **Note:** Make sure you have installed all dependencies (`npm install`) before running seeders. Seeders may hash passwords using bcrypt and read values from your `.env` file for Sequelize.
+   > **Note:**
+   > - Make sure you have installed all dependencies (`npm install`) before running seeders. Seeders may hash passwords using bcrypt and read values from your `.env` file for Sequelize.
+   > - To set up the default admin user, add the following variables to your `.env` file:
+   >   - `ADMIN_USERNAME` (default: `admin`)
+   >   - `ADMIN_PASSWORD` (default: `admin`)
+   >   - `ADMIN_EMAIL` (default: `admin@admin.com`)
+   >   If these variables are not set, the seeder will use the default values above.
 5. Start the server:
    ```sh
    npm start

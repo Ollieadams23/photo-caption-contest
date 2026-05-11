@@ -6,7 +6,7 @@ const Sequelize = require('sequelize');
 const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
+const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
 
 let sequelize;
@@ -15,6 +15,16 @@ if (config.use_env_variable) {
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
+
+// Debug: Print DB connection env variables before initializing Sequelize
+console.log('[DEBUG] DB_USER:', process.env.DB_USER);
+console.log('[DEBUG] DB_PASSWORD:', typeof process.env.DB_PASSWORD === 'string' ? '*'.repeat(process.env.DB_PASSWORD.length) : process.env.DB_PASSWORD);
+console.log('[DEBUG] DB_NAME:', process.env.DB_NAME);
+console.log('[DEBUG] DB_HOST:', process.env.DB_HOST);
+console.log('[DEBUG] config.username:', config.username);
+console.log('[DEBUG] config.password:', typeof config.password === 'string' ? '*'.repeat(config.password.length) : config.password);
+console.log('[DEBUG] config.database:', config.database);
+console.log('[DEBUG] config.host:', config.host);
 
 fs
   .readdirSync(__dirname)

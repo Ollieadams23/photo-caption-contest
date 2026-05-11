@@ -1,4 +1,3 @@
-
 const express = require('express');// routes/images.js
 const path = require('path');
 const router = express.Router();// Import the 'express' module and create a new router instance. This allows us to define routes for handling HTTP requests related to images.
@@ -16,6 +15,18 @@ redisClient.connect()
 
 
 
+/**
+ * @swagger
+ * /images:
+ *   get:
+ *     summary: Get all images
+ *     tags: [Images]
+ *     responses:
+ *       200:
+ *         description: List of images
+ *       500:
+ *         description: Failed to fetch images
+ */
 router.get('/', async (req, res) => {
     try {
         // Redis caching enabled
@@ -41,6 +52,27 @@ router.get('/', async (req, res) => {
 
 
 
+/**
+ * @swagger
+ * /images/{id}:
+ *   get:
+ *     summary: Get image by ID
+ *     tags: [Images]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Image ID
+ *     responses:
+ *       200:
+ *         description: Image data
+ *       404:
+ *         description: No image found with that ID
+ *       500:
+ *         description: Failed to fetch image
+ */
 router.get('/:id', async (req, res) => {
     const imageId = req.params.id;
     try {

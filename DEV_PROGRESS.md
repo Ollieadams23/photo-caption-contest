@@ -4,6 +4,10 @@ This file tracks each completed step in the Photo Caption Contest backend projec
 
 
 ## Progress Checklist
+- **[2026-05-11]** Refactored Sequelize config to use environment variables via .env and config.js. Ensured dotenv is loaded for all CLI operations (migrations, seeders). Updated .sequelizerc to point to config.js. Removed config.json to prevent conflicts.
+- **[2026-05-11]** Updated demo-user seeder to hash the admin password from .env using bcrypt at runtime. Seeder now uses ADMIN_USERNAME, ADMIN_PASSWORD, and ADMIN_EMAIL from .env, with defaults if not set.
+- **[2026-05-11]** Fixed persistent "password must be a string" error by ensuring .env is loaded in config.js and models/index.js, and by removing config.json. Verified CLI and app both use environment variables.
+- **[2026-05-11]** Updated README to document .env admin variables and their defaults. Added onboarding notes for dependency install and seeder requirements.
 
 - [x] Project initialized (npm, git)
 - [x] Dependencies installed

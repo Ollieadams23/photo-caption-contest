@@ -1,4 +1,3 @@
-
 const express = require('express');// Import the 'express' module, which is a web application framework for Node.js. This allows us to create a server and handle HTTP requests and responses.
 const app = express();// Import the 'express' module and create an instance of it called 'app'.
 const db = require('./models'); // Import the database models from the 'models' directory. This allows us to interact with the database using Sequelize.
@@ -73,17 +72,14 @@ app.use('/images', imagesRouter);
 const captionsRouter = require('./routes/captions');
 app.use('/captions', captionsRouter);
 
+// Swagger setup
+const { swaggerUi, swaggerSpec } = require('./swagger');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 // Set up the server to handle GET requests to the root URL ('/').
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
-
-
-
-
-
-
-
 
 // Set up the server to listen on port 3000.
 app.listen(3000, () => {

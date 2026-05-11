@@ -4,6 +4,43 @@ const { User } = require('../models');
 const { body, validationResult } = require('express-validator');
 const router = express.Router();
 
+/**
+ * @swagger
+ * /auth/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - email
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 example: demo_user
+ *               email:
+ *                 type: string
+ *                 example: demo@example.com
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *     responses:
+ *       201:
+ *         description: User registered successfully
+ *       400:
+ *         description: Validation error
+ *       409:
+ *         description: Email already registered
+ *       500:
+ *         description: Registration failed
+ */
+
 // Registration endpoint
 router.post('/register', 
   body('email').isEmail().normalizeEmail().withMessage('Valid email is required.'),
@@ -32,6 +69,39 @@ router.post('/register',
   }
 });
 
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Log in a user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: demo@example.com
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *       400:
+ *         description: Email and password are required
+ *       401:
+ *         description: Invalid credentials
+ *       500:
+ *         description: Login failed
+ */
+
 // Login endpoint
 router.post('/login', async (req, res) => {
   try {
@@ -59,6 +129,17 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Login failed.' });
   }
 });
+
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Log out the current user
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Logged out successfully
+ */
 
 // Logout endpoint
 router.post('/logout', (req, res) => {

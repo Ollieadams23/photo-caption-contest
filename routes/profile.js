@@ -1,8 +1,18 @@
 const express = require('express');
 const { User } = require('../models');
 const router = express.Router();
-
-
+/**
+ * @swagger
+ * /profile:
+ *   get:
+ *     summary: Get the profile page (HTML)
+ *     tags: [Profile]
+ *     responses:
+ *       200:
+ *         description: Profile HTML page
+ *       302:
+ *         description: Redirect to login if not authenticated
+ */
 // Serve the profile page (HTML)
 router.get('/', (req, res) => {
   if (req.session.loggedIn !== true) {
@@ -11,6 +21,22 @@ router.get('/', (req, res) => {
   res.sendFile(require('path').join(__dirname, '../private/profile.html'));
 });
 
+/**
+ * @swagger
+ * /profile/data:
+ *   get:
+ *     summary: Get user profile data
+ *     tags: [Profile]
+ *     responses:
+ *       200:
+ *         description: User profile data (username, email)
+ *       401:
+ *         description: Not authorized
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Failed to fetch user profile
+ */
 // API endpoint to get user profile data (username, email)
 router.get('/data', async (req, res) => {
   try {
