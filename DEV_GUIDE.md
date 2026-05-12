@@ -23,13 +23,19 @@ This backend is built with Node.js, Express, Sequelize (PostgreSQL), and support
    ```sh
    npm install
    ```
-2. Set up your `.env` file with database credentials.
+2. Set up your `.env` file with database credentials and (optionally) a Redis connection URL.
 3. Run migrations and seeders:
    ```sh
    npx sequelize-cli db:migrate
    npx sequelize-cli db:seed:all
    ```
-4. Start the server:
+4. (Optional, for Redis on Render):
+    - If deploying to Render and using a managed Redis instance, add the `REDIS_URL` environment variable in the Render dashboard. Example:
+       ```
+       REDIS_URL=redis://red-xxxx:password@redis-xxxx:6379
+       ```
+    - Locally, you can add `REDIS_URL` to your `.env` file if you want to use a non-default Redis server.
+5. Start the server:
    ```sh
    npm start
    ```
@@ -47,7 +53,7 @@ This backend is built with Node.js, Express, Sequelize (PostgreSQL), and support
 - **sequelize**: ORM for PostgreSQL
 - **bcrypt**: Password hashing
 - **express-session**: Session management
-- **redis**: Caching image lists and metadata for performance
+- **redis**: Caching image lists and metadata for performance. If Redis is unavailable, the app will still run, but caching will be disabled.
 - **multer**: File upload handling for images
 - **bad-words** or **leo-profanity**: Profanity filter for captions/comments
 
@@ -74,9 +80,19 @@ This backend is built with Node.js, Express, Sequelize (PostgreSQL), and support
 - Use Postman or similar tools to test endpoints.
 - Check error handling for all routes.
 
+## API Documentation (Swagger UI)
+Interactive API documentation is available via Swagger UI:
+
+- All main endpoints are documented using Swagger JSDoc comments in the route files.
+- After starting the server, open your browser and go to:
+   - Local: [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
+   - Render: `https://your-app.onrender.com/api-docs` (replace with your actual Render URL)
+- The Swagger UI allows you to view, explore, and test API endpoints directly from your browser.
+- The docs are always up-to-date with your code and support live testing of endpoints.
+
 ## Deployment
 - Prepare for deployment to Render or similar platforms.
-- Set environment variables for production.
+- Set environment variables for production, including `REDIS_URL` if using Redis on Render. If `REDIS_URL` is not set, the app will default to a local Redis instance.
 
 ---
 

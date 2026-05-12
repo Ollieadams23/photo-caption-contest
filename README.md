@@ -8,7 +8,7 @@ A web application for uploading images and submitting creative captions. Built w
 - Submit captions for images
 - Admin panel for managing images
 - Profanity filter for captions/comments
-- Redis caching for fast image loading
+- Redis caching for fast image loading (optional; app still works if Redis is unavailable)
 
 ## Setup
 1. Clone the repository
@@ -17,6 +17,12 @@ A web application for uploading images and submitting creative captions. Built w
    npm install
    ```
 3. Configure your database in `.env` and set up PostgreSQL
+4. (Optional, for Redis):
+    - If using Redis on Render, add the `REDIS_URL` environment variable in the Render dashboard. Example:
+       ```
+       REDIS_URL=redis://red-xxxx:password@redis-xxxx:6379
+       ```
+    - Locally, you can add `REDIS_URL` to your `.env` file if you want to use a non-default Redis server. If not set, the app defaults to a local Redis instance.
 4. Run migrations and seeders:
    ```sh
    npx sequelize-cli db:migrate

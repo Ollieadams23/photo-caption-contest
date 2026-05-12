@@ -19,9 +19,9 @@ This file tracks each completed step in the Photo Caption Contest backend projec
 - [x] Local cache added (Redis installed and configured for caching images and captions)
 
 - **[2026-05-08]** Installed and configured Redis for local caching. Added instructions for installing Redis server and the Node.js redis client. Documented that Redis can be used for both development and production, and is suitable for caching images and captions.
-- [ ] Swagger documentation set up
+- [x] Swagger documentation set up
 - [x] Endpoints tested with Postman
-- [ ] Deployment to Render completed
+- [x] Deployment to Render completed
 
 ---
 
