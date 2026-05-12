@@ -19,6 +19,7 @@
     "sequelize-cli": "^6.6.5"
   },
   "scripts": {
-    "dev": "concurrently \"nodemon app.js\""
+    "dev": "nodemon app.js",
+    "start": "node app.js"
   }
 }
