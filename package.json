@@ -20,6 +20,8 @@
   },
   "scripts": {
     "dev": "nodemon app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "migrate": "npx sequelize-cli db:migrate",
+  "seed": "npx sequelize-cli db:seed:all"
   }
 }
